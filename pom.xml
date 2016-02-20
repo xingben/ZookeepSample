@@ -5,7 +5,7 @@
 	<groupId>net.xingws</groupId>
 	<artifactId>zookeeper-sample</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>pom</packaging>
 
 	<name>zookeeper-sample</name>
 	<url>http://maven.apache.org</url>
@@ -22,4 +22,7 @@
 		</dependency>
 
 	</dependencies>
+	<modules>
+		<module>common</module>
+	</modules>
 </project>
