@@ -28,6 +28,8 @@ import net.xingws.common.service.ZooKeeperService;
  */
 public class MasterService extends ZooKeeperService {
 	private static final Logger logger = LoggerFactory.getLogger(MasterService.class);
+	//constants for zookeeper master node
+	public static final String MASTER_NODE = "/master";
 	
 	/**
 	 * @param serviceName
@@ -48,7 +50,7 @@ public class MasterService extends ZooKeeperService {
 	}
 	
 	private void competeForLeader() {
-		this.getZkServer().create("/AssignmentEngine", 
+		this.getZkServer().create(MASTER_NODE, 
 				this.getServiceName().getBytes(), 
 				Ids.OPEN_ACL_UNSAFE, 
 				CreateMode.EPHEMERAL, 
@@ -64,7 +66,7 @@ public class MasterService extends ZooKeeperService {
 	}
 	
 	private void leaderExists() {
-		this.getZkServer().exists("/AssignmentEngine", leaderExistsWatcher, leaderExistsCallback, null);
+		this.getZkServer().exists(MASTER_NODE, leaderExistsWatcher, leaderExistsCallback, null);
 	}
 	
 	StringCallback competeForLeaderCallback = new StringCallback() {
@@ -75,7 +77,7 @@ public class MasterService extends ZooKeeperService {
 				competeForLeader();
 				break;
 			case OK:
-				//take leadership
+				logger.info("Taking the leadership");
 				break;
 			case NODEEXISTS:
 				leaderExists();
@@ -100,7 +102,7 @@ public class MasterService extends ZooKeeperService {
 				break;
 			case OK:
 				if(((String)ctx).equals(new String(data))) {
-					//take leadership
+					logger.info("Taking the leadership");
 				}else{
 					leaderExists();
 				}
@@ -148,5 +150,16 @@ public class MasterService extends ZooKeeperService {
 	 */
 	@Override
 	protected void restartService() {
+		try {
+			this.destroy();
+			this.initialize();
+		} catch (XingwsServiceException e) {
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e1) {
+				//intentional silent
+			}
+			this.restartService();
+		}
 	}
 }

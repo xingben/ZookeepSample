@@ -35,9 +35,9 @@ public abstract class ZooKeeperService implements Service, Watcher {
 		logger.info(serviceName + " is initializing");
 		
 		try {
-			this.zkServer = new ZooKeeper(this.connectionString, this.connectionTimeout, null);
+			this.zkServer = new ZooKeeper(this.connectionString, this.connectionTimeout, this);
 		} catch (IOException e) {
-			logger.error(e.getMessage());
+			logger.error("initialize is failed", e);
 			throw new XingwsServiceException(e);
 		}
 
