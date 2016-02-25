@@ -24,6 +24,34 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>com.github.goldin</groupId>
+				<artifactId>copy-maven-plugin</artifactId>
+				<version>0.2.5</version>
+				<executions>
+					<execution>
+						<id>deploy-to-local-directory</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<skipIdentical>false</skipIdentical>
+							<failIfNotFound>false</failIfNotFound>
+							<resources>
+								<resource>
+									<description>Copy artifact to another directory</description>
+									<targetPath>${project.basedir}/../target</targetPath>
+									<directory>${project.basedir}/target</directory>
+									<includes>
+										<include>*.jar</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -46,7 +74,6 @@
 	</dependencies>
 	<modules>
 		<module>common</module>
-		<module>client</module>
-		<module>TaskAssignmentEngine</module>
+		<module>LeaderElectionZookeeperNativeAPI</module>
 	</modules>
 </project>

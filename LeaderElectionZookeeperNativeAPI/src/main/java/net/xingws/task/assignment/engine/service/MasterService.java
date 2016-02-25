@@ -26,8 +26,8 @@ import net.xingws.common.service.ZooKeeperService;
  * @author benxing
  *
  */
-public class TaskAssignmentEngineService extends ZooKeeperService {
-	private static final Logger logger = LoggerFactory.getLogger(TaskAssignmentEngineService.class);
+public class MasterService extends ZooKeeperService {
+	private static final Logger logger = LoggerFactory.getLogger(MasterService.class);
 	
 	/**
 	 * @param serviceName
@@ -36,52 +36,16 @@ public class TaskAssignmentEngineService extends ZooKeeperService {
 	 */
 
 	@Inject
-	public TaskAssignmentEngineService(@Named("Zookeeper connection string") String connectionString, @Named("Zookeeper connection timeout") int connectionTimeout) {
+	public MasterService(@Named("Zookeeper connection string") String connectionString, @Named("Zookeeper connection timeout") int connectionTimeout) {
 		super(connectionString, connectionTimeout);
 	}
 
 	@Override
 	public void initialize() throws XingwsServiceException {
 		super.initialize();
-		this.bootstrap();
 		this.competeForLeader();
 		
 	}
-	
-	private void bootstrap() {
-		createNode("/workers", new byte[0]);
-		createNode("/assign", new byte[0]);
-		createNode("/tasks", new byte[0]);
-		createNode("/status", new byte[0]);
-	}
-	
-	private void createNode(String path, byte[] data) {
-		this.getZkServer().create(path, data, Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT, createNodeCallback, data);
-	}
-	
-	StringCallback createNodeCallback = new StringCallback() {
-		public void processResult(int rc, String path, Object ctx, String name) {
-			switch(Code.get(rc)) {
-			case CONNECTIONLOSS:
-				//if it is the connection loss, we need just simplely recreate it 
-				createNode(path, (byte[]) ctx);
-				break;
-			
-			case OK:
-				//node has been create
-				logger.info(path + " has been created");
-				break;
-				
-			case NODEEXISTS:
-				//node exist
-				break;
-				
-			default:	
-				logger.error("Something went wrong: ",
-						KeeperException.create(Code.get(rc), path));
-			}
-		}
-	};
 	
 	private void competeForLeader() {
 		this.getZkServer().create("/AssignmentEngine", 

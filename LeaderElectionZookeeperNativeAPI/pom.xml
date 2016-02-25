@@ -7,8 +7,8 @@
     <artifactId>zookeeper-sample</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>client</artifactId>
-  <name>client</name>
+  <artifactId>LeaderElectionZookeeperNativeAPI</artifactId>
+  <name>LeaderElectionZookeeperNativeAPI</name>
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
