@@ -59,7 +59,7 @@ public class MasterService extends ZooKeeperService {
 	}
 	
 	private void checkLeaderShip() {
-		this.getZkServer().getData("/AssignmentEngine", 
+		this.getZkServer().getData("MASTER_NODE", 
 				false, 
 				this.checkLeaderShipCallback, 
 				this.getServiceName());
