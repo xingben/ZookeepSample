@@ -92,5 +92,6 @@
 		<module>common</module>
 		<module>LeaderElectionZookeeperNativeAPI</module>
 		<module>LeaderLatch</module>
+		<module>LeaderSelector</module>
 	</modules>
 </project>
