@@ -19,9 +19,8 @@ public class ZooKeeperModule extends AbstractModule {
 	@Override
 	protected void configure() {
 		//local host for standalone zookeeper
-		this.bind(String.class).annotatedWith(Names.named("Zookeeper connection string")).toInstance("127.0.0.1:2181");
+		this.bind(String.class).annotatedWith(Names.named("Zookeeper connection string")).toInstance("redis-01:2181,redis-2:2181,redis-3:2181");
 		//client connection timeout is 5s
 		this.bind(Integer.class).annotatedWith(Names.named("Zookeeper connection timeout")).toInstance(5000);
 	}
-
 }
